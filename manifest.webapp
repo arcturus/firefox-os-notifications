@@ -1,0 +1,20 @@
+{
+  "name": "Notifications",
+  "description": "Firefox OS Notifications Example",
+  "launch_path": "/index.html",
+  "orientation": "portrait",
+  "developer": {
+    "name": "Francisco Jordano",
+    "url": "http://github.com/arcturus"
+  },
+  "default_locale": "en",
+  "icons": {
+    "60": "/icons/icon.png"
+  },
+  "permissions": {
+    "desktop-notification": {}
+  },
+  "messages": [
+    { "notification": "/index.html" }
+  ]
+}
