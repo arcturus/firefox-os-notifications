@@ -35,6 +35,14 @@ var NotificationsTest = function NotificationsTest() {
     }
   };
 
+  /*
+    Uses the mozApps api to get a reference to the an app
+    object representing the current application.
+
+    We will use this to build the icon url and as well
+    to call the method 'launch' over the application object
+    that will bring our application to foreground 
+  */
   var getAppReference = function getAppReference(cb) {
     var request = navigator.mozApps.getSelf();
     request.onsuccess = function onApp(evt) {
@@ -42,6 +50,9 @@ var NotificationsTest = function NotificationsTest() {
     };
   };
 
+  /*
+    Build the icon full url for this app
+  */
   var getAppIcon = function getAppIcon(cb) {
     function buildIconURI(a) {
       var icons = a.manifest.icons;
@@ -59,6 +70,7 @@ var NotificationsTest = function NotificationsTest() {
     });
   };
 
+  // Creates a simple notification with no actions and external icon
   var createNotification = function createNotification() {
     var notification = navigator.mozNotification.createNotification('My Title',
       'My Description',
@@ -67,14 +79,17 @@ var NotificationsTest = function NotificationsTest() {
     notification.show();
   };
 
+  // Creates a notification using our app icon and adding some actions when clicking or closing
   var createAdvanceNotification = function createAdvancedNotification() {
     getAppIcon(function onAppIcon(icon) {
+      var data = new Date();
       var notification = navigator.mozNotification.createNotification(
         'Advanced notification',
         'My Description',
         icon);
 
       notification.onclick = function onclick() {
+        console.log(data);
         forgetNotification();
         app.launch();
       };
@@ -93,6 +108,10 @@ var NotificationsTest = function NotificationsTest() {
     notifications.splice(notifications.indexOf(not), 1);
   };
 
+  /*
+    Creates a notification like the previous one but add a huge and ugly
+    hack to add parameters via get parameters in the icon url
+  */
   var createWithParamsNotifications = function createWithParamsNotifications() {
     getAppIcon(function onAppIcon(icon) {
       var data = new Date();
@@ -129,8 +148,6 @@ var NotificationsTest = function NotificationsTest() {
 NotificationsTest.init();
 
 window.navigator.mozSetMessageHandler('notification', function onNotification(message) {
-  var imageUrl = message.imageURL;
-  console.log(imageUrl);
   NotificationsTest.getAppReference(function onApp(app) {
     app.launch();
   });
